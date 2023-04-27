@@ -17,3 +17,23 @@ export async function signUp(req, res){
         res.status(500).send(err.message)
     }
 }
+
+export async function signIn(req, res){
+    const {email, password} = req.body
+
+    try {
+        const checkEmail = await db.collection("users").findOne({email})
+        if(!checkEmail) return res.status(404).send("Email nao cadastrado")
+
+        const checkPassword = bcrypt.compareSync(password, checkEmail.password)
+        if(!checkPassword) return res.status(401).send("Senha incorreta")
+
+        const token = uuid()
+        await db.collection("sessions").insertOne({token, idUser: checkEmail._id})
+
+        const getBody = {token, name: checkEmail.name}
+        res.status(200).send(getBody)
+    } catch (err) {
+        res.status(500).send(err.message)
+    }
+}
