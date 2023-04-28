@@ -6,9 +6,7 @@ import { authValidation } from "../middlewares/authValidation.middleware.js";
 
 const productsRouter = Router();
 
-productsRouter.use(authValidation);
-
-productsRouter.post("/registrar-produto", validateSchema(productsSchema), registerProducts);
+productsRouter.post("/registrar-produto", authValidation, validateSchema(productsSchema), registerProducts);
 productsRouter.get("/produtos", getProducts);
 
 export default productsRouter;
