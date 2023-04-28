@@ -3,7 +3,7 @@ import { db } from "../database/database.connection.js";
 import bcrypt from "bcrypt";
 
 export async function registerProducts(req, res) {
-    const { name, price, description, amount, category } = req.body;
+    const { name, price, description, amount, category, image } = req.body;
     const { idUser } = res.locals.session;
 
     try {
@@ -14,7 +14,7 @@ export async function registerProducts(req, res) {
         if (admin.email !== process.env.EMAIL_ADMIN) return res.status(401).send("Sem autorização!");
         if (!checkPassword) return res.status(401).send("Sem autorização");
 
-        await db.collection("products").insertOne({ name, price, description, amount, category });
+        await db.collection("products").insertOne({ name, price, description, amount, category, image });
         res.status(201).send("Produto criado com sucesso");
     } catch (err) {
         res.status(500).send(err.message);
