@@ -23,7 +23,6 @@ export async function registerProducts(req, res) {
 }
 
 export async function getProducts(req, res) {
-
     try {
         const listaDeItens = await db.collection("products").find().toArray();
         res.send(listaDeItens);
