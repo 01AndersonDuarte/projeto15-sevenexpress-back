@@ -8,5 +8,6 @@ const productsRouter = Router();
 
 productsRouter.post("/registrar-produto", authValidation, validateSchema(productsSchema), registerProducts);
 productsRouter.get("/produtos", getProducts);
+productsRouter.get("/produtos/:id", getProducts);
 
 export default productsRouter;

@@ -23,9 +23,15 @@ export async function registerProducts(req, res) {
 }
 
 export async function getProducts(req, res) {
+    const { id } = req.params;
+
     try {
-        const listaDeItens = await db.collection("products").find().toArray();
-        res.send(listaDeItens);
+        if(!id){
+            const listaDeItens = await db.collection("products").find().toArray();
+            return res.send(listaDeItens);
+        }
+        const product = await db.collection("products").findOne({_id: new ObjectId(id)});
+        return res.send(product);
     } catch (err) {
         res.status(500).send(err.message);
     }
