@@ -31,7 +31,7 @@ export async function signIn(req, res){
         const token = uuid()
         await db.collection("sessions").insertOne({token, idUser: checkEmail._id})
 
-        const getBody = {token, name: checkEmail.name}
+        const getBody = {id: checkEmail._id, token, name: checkEmail.name}
         res.status(200).send(getBody)
     } catch (err) {
         res.status(500).send(err.message)
