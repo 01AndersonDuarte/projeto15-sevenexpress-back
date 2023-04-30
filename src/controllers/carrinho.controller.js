@@ -47,17 +47,19 @@ export async function finishPurchase(req, res) {
     console.log(req.body)
 
     try {
-        req.body.forEach(async function edit(e) {
-            const amountProduct = await db.collection("products").findOne({ _id: new ObjectId(e) })
+        
+        for(let i = 0; i < req.body.length; i++){
+            const amountProduct = await db.collection("products").findOne({ _id: new ObjectId(req.body[i]) })
             if(!amountProduct.amount === 0) return res.status(404).send("Esse produto ja esta esgotado")
 
-            const deleteProduct = await db.collection("carrinho").deleteOne({ idProduct: e, idUser: id })
+            console.log(amountProduct.amount)
+
+            const deleteProduct = await db.collection("carrinho").deleteOne({ idProduct: req.body[i], idUser: id })
 
             if (deleteProduct.deletedCount === 0) return res.status(404).send("Esse produto nao existe")
     
-            console.log(amountProduct.amount)
-            await db.collection("products").updateOne({ _id: new ObjectId(e) }, { $set: { amount: amountProduct.amount - 1 } })
-        })
+            await db.collection("products").updateOne({ _id: new ObjectId(req.body[i]) }, { $set: { amount: amountProduct.amount - 1 } })
+        }
 
 
 
