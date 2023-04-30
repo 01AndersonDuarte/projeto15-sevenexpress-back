@@ -1,6 +1,7 @@
 import { db } from "../database/database.connection.js";
 import {v4 as uuid} from "uuid"
 import bcrypt from "bcrypt"
+import { ObjectId } from "mongodb";
 
 export async function signUp(req, res){
     const {name, email, password} =  req.body
@@ -31,7 +32,10 @@ export async function signIn(req, res){
         const token = uuid()
         await db.collection("sessions").insertOne({token, idUser: checkEmail._id})
 
-        const getBody = {id: checkEmail._id, token, name: checkEmail.name}
+        const idUser = (checkEmail._id).toString();
+        const userCarrinho = await db.collection("carrinho").find({idUser}).toArray()
+
+        const getBody = {id: checkEmail._id, token, name: checkEmail.name, cart: userCarrinho}
         res.status(200).send(getBody)
     } catch (err) {
         res.status(500).send(err.message)
