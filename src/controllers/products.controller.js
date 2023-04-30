@@ -24,13 +24,18 @@ export async function registerProducts(req, res) {
 
 export async function getProducts(req, res) {
     const { id } = req.params;
+    const { category } = req.query;
 
     try {
-        if(!id){
+        if (!id) {
+            if (category === "mais vendidos" || category === "eletrodomestico" || category === "tecnologia" || category === "vestuario" || category === "cuidado pessoal") {
+                const section = await db.collection("products").find({ category: category }).toArray();
+                return res.send(section);
+            }
             const listaDeItens = await db.collection("products").find().toArray();
             return res.send(listaDeItens);
         }
-        const product = await db.collection("products").findOne({_id: new ObjectId(id)});
+        const product = await db.collection("products").findOne({ _id: new ObjectId(id) });
         return res.send(product);
     } catch (err) {
         res.status(500).send(err.message);
