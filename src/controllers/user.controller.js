@@ -33,9 +33,14 @@ export async function signIn(req, res){
         await db.collection("sessions").insertOne({token, idUser: checkEmail._id})
 
         const idUser = (checkEmail._id).toString();
-        const userCarrinho = await db.collection("carrinho").find({idUser}).toArray()
+        const userCarrinho = await db.collection("carrinho").find({idUser}).toArray();
 
         const getBody = {id: checkEmail._id, token, name: checkEmail.name, cart: userCarrinho}
+
+        if (checkEmail.email === process.env.EMAIL_ADMIN && bcrypt.compareSync(process.env.PASSWORD_ADMIN, checkEmail.password)){
+            return res.status(200).send({...getBody, root: true});
+        }
+
         res.status(200).send(getBody)
     } catch (err) {
         res.status(500).send(err.message)
