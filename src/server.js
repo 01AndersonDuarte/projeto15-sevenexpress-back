@@ -9,7 +9,7 @@ server.use(cors())
 server.use(express.json())
 server.use(router)
 
-setInterval(bestSellers, 5000);
+setInterval(bestSellers, 100000);
 
 const port = process.env.PORT || 5000
 server.listen(port, () => console.log(`Servidor rodando na porta ${port}`))
