@@ -4,7 +4,7 @@ import { deleteCarrinho, finishPurchase, getCarrinho, postCarrinho } from "../co
 
 const carrinhoRouter = Router()
 
-//carrinhoRouter.use(authValidation)
+carrinhoRouter.use(authValidation)
 carrinhoRouter.post("/carrinho", postCarrinho)
 carrinhoRouter.get("/carrinho/:id", getCarrinho)
 carrinhoRouter.post("/carrinho/:id", deleteCarrinho)
